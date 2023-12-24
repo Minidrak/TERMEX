@@ -16,7 +16,8 @@ gr = fgr.add_subplot(1,1,1)
 gr.axis('equal')
 gr.set_xlim((-3, 3))
 gr.set_ylim((-3, 3))
-               
+
+
 R = 1
 RB = 0.1
 L = 1
@@ -62,10 +63,10 @@ def update(i):
     B_circle.set_center((Xb, Yb))
     OA.set_data([0, Xa], [0, Ya])
 
-
-    Betas = numpts * (Ns * 2*n.pi - phi[i])
-    Xs = (r1 + (r2-r1) * numpts)  * n.cos(Betas+n.pi/2)
-    Ys = (r1 + (r2-r1) * numpts) *  n.sin(Betas+n.pi/2)
+    
+    Betas = numpts * (Ns * 2*n.pi)
+    Xs = (r1 + (r2-r1) * numpts)  * n.cos(Betas+theta)
+    Ys = (r1 + (r2-r1) * numpts) *  n.sin(Betas+theta)
 
     Spiral.set_data(Xs, Ys)
 
