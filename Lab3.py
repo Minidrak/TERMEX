@@ -65,16 +65,23 @@ dpsi = Y[:,3]
 
 ddphi = n.zeros_like(t)
 ddpsi = n.zeros_like(t)
+ROX = n.zeros_like(t)
 for i in range(len(t)):
-    ddphi =  SystDiffEq(Y[i], t[i], m1, m2, R, L, c, k, g, phist)[2]
-    ddpsi =  SystDiffEq(Y[i], t[i], m1, m2, R, L, c, k, g, phist)[3]
-
+    ddphi[i] =  SystDiffEq(Y[i], t[i], m1, m2, R, L, c, k, g, phist)[2]
+    ddpsi[i] =  SystDiffEq(Y[i], t[i], m1, m2, R, L, c, k, g, phist)[3]
+    ROX[i] = m2 * (R*(ddphi[i]*n.cos(phi[i]) - (dphi[i]**2)*n.sin(phi[i])) + L*(ddpsi[i]*n.cos(phi[i])-(dpsi[i]**2)*n.sin(psi[i])))
 fgrt  =  plt.figure()
 phiplt = fgrt.add_subplot(2,1,1)
 phiplt.plot(t,phi)
 psiplt = fgrt.add_subplot(2,1,2)
 psiplt.plot(t,psi)
+
+fgr_ROX = plt.figure()
+gr_ROX = fgr_ROX.add_subplot(1, 1, 1)
+gr_ROX.plot(t, ROX)
+
 fgrt.show()
+
 
 fgr = plt.figure()
 gr = fgr.add_subplot(1,1,1)
