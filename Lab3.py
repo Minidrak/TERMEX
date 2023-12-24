@@ -48,7 +48,7 @@ g = 9.81
 phist  = 0
 
 step = 1500
-t = n.linspace(0,10,step)
+t = n.linspace(0,6.2,step)
 #x = n.sin(t)
 #phi = n.sin(2*t)
 
