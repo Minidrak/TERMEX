@@ -51,7 +51,7 @@ step = 1500
 t = n.linspace(0,6.2,step)
 #x = n.sin(t)
 #phi = n.sin(2*t)
-
+theta = n.sin(t)
 y0 = [n.pi/2, n.pi/2, 0, 0]
 
 
@@ -71,14 +71,13 @@ for i in range(len(t)):
     ddpsi[i] =  SystDiffEq(Y[i], t[i], m1, m2, R, L, c, k, g, phist)[3]
     ROX[i] = m2 * (R*(ddphi[i]*n.cos(phi[i]) - (dphi[i]**2)*n.sin(phi[i])) + L*(ddpsi[i]*n.cos(phi[i])-(dpsi[i]**2)*n.sin(psi[i])))
 fgrt  =  plt.figure()
-phiplt = fgrt.add_subplot(2,1,1)
+phiplt = fgrt.add_subplot(3,1,1)
 phiplt.plot(t,phi)
-psiplt = fgrt.add_subplot(2,1,2)
+psiplt = fgrt.add_subplot(3,1,2)
 psiplt.plot(t,psi)
 
-fgr_ROX = plt.figure()
-gr_ROX = fgr_ROX.add_subplot(1, 1, 1)
-gr_ROX.plot(t, ROX)
+ROXplt = fgrt.add_subplot(3, 1, 3)
+ROXplt.plot(t, ROX)
 
 fgrt.show()
 
@@ -96,8 +95,8 @@ circle_patch = gr.add_patch(circle)
 
 Xa = n.cos(phi)
 Ya = n.sin(phi)
-Xb = Xa + n.cos(phi)
-Yb = Ya + n.sin(phi)
+Xb = Xa + n.cos(phi) * L
+Yb = Ya + n.sin(phi) * L
 
 pA = gr.plot(Xa[0],Ya[0], marker='o',color='g')[0]
 pB = gr.plot(Xb[0],Yb[0], marker='o',color='b')[0]
@@ -111,7 +110,7 @@ OA = gr.plot([0, Xa[0]], [0, Ya[0]], 'k--')[0]
 Ns = 1
 r1 = 0.05
 r2 = 0.2
-numpts = n.linspace(0, 1, 50*Ns+1)
+numpts = n.linspace(0, 1, 1500*Ns+1)
 Betas = numpts * (Ns * 2*n.pi -  phi[0])
 Xs = (r1 + (r2-r1) * numpts)  * n.cos(Betas + n.pi/2)
 Ys = (r1 + (r2-r1) * numpts) *  n.sin(Betas + n.pi/2)
@@ -119,29 +118,29 @@ Ys = (r1 + (r2-r1) * numpts) *  n.sin(Betas + n.pi/2)
 Spiral = gr.plot(Xs, Ys)[0]
 
 def update(i):
-    global Xa, Ya, Xb, Yb, B_circle, OA
-    psi = n.cos(t[i] * 3)
-    theta  = n.radians(i)
-    Xa = n.cos(theta)
-    Ya = n.sin(theta)
-    Xb = Xa + n.cos(theta + psi) * L
-    Yb = Ya + n.sin(theta + psi) * L
-    pA.set_data(Xa, Ya)
-    pB.set_data(Xb, Yb)
-    AB.set_data([Xa, Xb], [Ya, Yb])
-    B_circle.set_center((Xb, Yb))
-    OA.set_data([0, Xa], [0, Ya])
+    #global Xa, Ya, Xb, Yb, B_circle, OA
+    #psi = n.cos(t[i] * 3)
+    #theta  = n.radians(i)
+    #Xa = n.cos(theta)
+    #Ya = n.sin(theta)
+    Xb = Xa[i] + n.cos(theta + psi) * L
+    Yb = Ya[i] + n.sin(theta + psi) * L
+    pA.set_data(Xa[i], Ya[i])
+    pB.set_data(Xb[i], Yb[i])
+    AB.set_data([Xa[i], Xb[i]], [Ya[i], Yb[i]])
+    B_circle.set_center((Xb[i], Yb[i]))
+    OA.set_data([0, Xa[i]], [0, Ya[i]])
 
     
     Betas = numpts * (Ns * 2*n.pi)
-    Xs = (r1 + (r2-r1) * numpts)  * n.cos(Betas+theta)
-    Ys = (r1 + (r2-r1) * numpts) *  n.sin(Betas+theta)
+    Xs = (r1 + (r2-r1) * numpts)  * n.cos(Betas)
+    Ys = (r1 + (r2-r1) * numpts) *  n.sin(Betas)
 
     Spiral.set_data(Xs, Ys)
 
 
-    return circle_patch, pA, pB, AB, B_circle, OA,  Spiral
+    return #circle_patch, pA, pB, AB, B_circle, OA,  Spiral
 
-anim = FuncAnimation(fgr, update, frames=step, interval=1, blit=True)
+anim = FuncAnimation(fgr, update, frames=step, interval=1)
 
 plt.show()
